@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: photo:; style-src 'self' 'unsafe-inline'; font-src 'self'">
+  <title>our little dates</title>
+  <link rel="stylesheet" href="node_modules/@fontsource/fredoka/400.css">
+  <link rel="stylesheet" href="node_modules/@fontsource/fredoka/500.css">
+  <link rel="stylesheet" href="node_modules/@fontsource/fredoka/600.css">
+  <link rel="stylesheet" href="node_modules/@fontsource/quicksand/500.css">
+  <link rel="stylesheet" href="node_modules/@fontsource/quicksand/700.css">
+  <link rel="stylesheet" href="node_modules/@fontsource/gaegu/400.css">
+  <link rel="stylesheet" href="node_modules/@fontsource/gaegu/700.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="season-fx" id="seasonFx" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="brand">
+      <h1>our little dates <span class="h1-heart">♡</span></h1>
+      <p class="sub">things we want to do together</p>
+    </div>
+    <div class="top-actions">
+      <button id="seasonBtn" class="btn btn-soft btn-season" type="button" title="change the season"></button>
+      <button id="bookBtn" class="btn btn-soft" type="button" title="our little book">❦ our book</button>
+      <button id="pickBtn" class="btn btn-pink" type="button">✿ pick one for us ✿</button>
+      <button id="namesBtn" class="btn btn-soft" type="button" title="who are we?">♡ us</button>
+    </div>
+  </header>
+
+  <nav class="toolbar">
+    <div class="tabs">
+      <button class="tab is-active" data-tab="wish" type="button">wishlist <span class="count" id="wishCount">0</span></button>
+      <button class="tab" data-tab="done" type="button">done &amp; loved <span class="count" id="doneCount">0</span></button>
+    </div>
+    <label class="search">
+      <span aria-hidden="true">✦</span>
+      <input id="search" type="search" placeholder="search our dates…" spellcheck="false">
+    </label>
+  </nav>
+  <div class="chips" id="chips"></div>
+
+  <main id="grid" class="grid"></main>
+  <p id="empty" class="empty" hidden></p>
+
+  <button id="fab" class="fab" type="button" title="new idea (Ctrl+N)">+</button>
+
+  <!-- add / edit a date -->
+  <div class="overlay" id="editOverlay" hidden>
+    <form class="modal" id="editForm" autocomplete="off">
+      <div class="modal-banner" id="banner"><span class="banner-label" id="bannerLabel">new date idea</span></div>
+      <div class="modal-body">
+        <label class="field"><span>what's the date?</span>
+          <input name="title" maxlength="80" placeholder="clay date, guinness date…" required></label>
+        <div class="field"><span>whose idea?</span><div class="seg" id="whoSeg"></div></div>
+        <label class="field"><span>the plan</span>
+          <textarea name="note" rows="3" placeholder="where, what to bring, little details…"></textarea></label>
+        <div class="row">
+          <label class="field"><span>tags</span><input name="tags" placeholder="cozy, rainy day, outside"></label>
+          <div class="field"><span>cost</span><div class="seg" id="costSeg"></div></div>
+        </div>
+        <div class="field"><span>card look</span><div class="swatches" id="swatches"></div></div>
+        <div class="field"><span>cat stickers <small id="stickerCount"></small></span><div class="sticker-tray" id="stickerTray"></div></div>
+        <div class="field"><span>photos <small>drop them here too</small></span>
+          <div class="photo-tray" id="photoTray"></div>
+          <input type="file" id="photoInput" accept="image/*" multiple hidden>
+        </div>
+        <label class="check"><input type="checkbox" name="done"><span class="box"></span> we did it!</label>
+        <div class="done-fields" id="doneFields" hidden>
+          <label class="field"><span>when?</span><input type="date" name="doneDate"></label>
+          <label class="field"><span>a little memory</span>
+            <textarea name="memory" rows="3" placeholder="the best part was…"></textarea></label>
+        </div>
+      </div>
+      <footer class="modal-foot">
+        <button type="button" class="btn-text danger" id="deleteBtn">delete</button>
+        <div class="spacer"></div>
+        <button type="button" class="btn btn-soft" data-close>cancel</button>
+        <button type="submit" class="btn btn-pink">save ♡</button>
+      </footer>
+    </form>
+  </div>
+
+  <!-- pick one for us -->
+  <div class="overlay" id="pickOverlay" hidden>
+    <div class="pick">
+      <p class="pick-kicker" id="pickKicker">shuffling…</p>
+      <div class="pick-card" id="pickCard">
+        <div class="pick-photo" id="pickPhoto"></div>
+        <div class="pick-label"><span id="pickStickers"></span><h2 id="pickTitle"></h2><p id="pickNote"></p></div>
+      </div>
+      <div class="pick-actions" id="pickActions" hidden>
+        <button class="btn btn-soft" id="pickAgain" type="button">spin again</button>
+        <button class="btn btn-pink" id="pickYes" type="button">let's do it ♡</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- our little book -->
+  <div class="overlay book-overlay" id="bookOverlay" hidden>
+    <div class="book-stage">
+      <div class="book" id="book"></div>
+      <div class="book-nav">
+        <button class="book-arrow" id="bookPrev" type="button" aria-label="previous page">‹</button>
+        <span class="book-count" id="bookCount"></span>
+        <button class="book-arrow" id="bookNext" type="button" aria-label="next page">›</button>
+      </div>
+    </div>
+    <button class="book-close" type="button" data-close aria-label="close the book">×</button>
+  </div>
+
+  <!-- names -->
+  <div class="overlay" id="namesOverlay" hidden>
+    <form class="modal small" id="namesForm" autocomplete="off">
+      <div class="modal-body">
+        <h2 class="modal-title">who are we? ♡</h2>
+        <label class="field"><span>you</span><input name="a" maxlength="20"></label>
+        <label class="field"><span>her</span><input name="b" maxlength="20"></label>
+        <p class="hint" id="whereHint"></p>
+      </div>
+      <footer class="modal-foot">
+        <div class="spacer"></div>
+        <button type="button" class="btn btn-soft" data-close>cancel</button>
+        <button type="submit" class="btn btn-pink">save ♡</button>
+      </footer>
+    </form>
+  </div>
+
+  <script src="themes.js"></script>
+  <script src="stickers.js"></script>
+  <script src="mochi.js"></script>
+  <script src="app.js"></script>
+  <script src="book.js"></script>
+</body>
+</html>
