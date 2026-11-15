@@ -11,7 +11,8 @@
     "android": "npm run sync && cap open android",
     "ios": "npm run sync && cap open ios",
     "icons": "node scripts/make-icons.mjs && capacitor-assets generate --android --ios --iconBackgroundColor \"#fff6f8\" --splashBackgroundColor \"#fbf5ee\" --splashBackgroundColorDark \"#3b2a2e\"",
-    "apk": "npm run sync && cd android && gradlew assembleDebug"
+    "apk": "npm run sync && cd android && gradlew assembleDebug",
+    "aab": "npm run sync && cd android && gradlew bundleRelease"
   },
   "devDependencies": {
     "@capacitor/assets": "^4.0.0",
