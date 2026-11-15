@@ -9,9 +9,12 @@
     "build:web": "node scripts/build-web.mjs",
     "sync": "npm run build:web && cap sync",
     "android": "npm run sync && cap open android",
-    "ios": "npm run sync && cap open ios"
+    "ios": "npm run sync && cap open ios",
+    "icons": "node scripts/make-icons.mjs && capacitor-assets generate --android --ios --iconBackgroundColor \"#fff6f8\" --splashBackgroundColor \"#fbf5ee\" --splashBackgroundColorDark \"#3b2a2e\"",
+    "apk": "npm run sync && cd android && gradlew assembleDebug"
   },
   "devDependencies": {
+    "@capacitor/assets": "^4.0.0",
     "@capacitor/cli": "^8.6.2",
     "electron": "^45.3.1"
   },
