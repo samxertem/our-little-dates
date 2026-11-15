@@ -7,4 +7,6 @@ contextBridge.exposeInMainWorld('store', {
   where: () => ipcRenderer.invoke('dates:where'),
   addPhoto: (jpegBytes) => ipcRenderer.invoke('photos:add', jpegBytes),
   tidyPhotos: (keepNames) => ipcRenderer.invoke('photos:tidy', keepNames),
+  // where the page can show a saved photo from (served by main.js)
+  photoUrl: (name) => `photo://p/${name}`,
 });

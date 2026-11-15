@@ -8,7 +8,7 @@ const SEASON_CYCLE = ['auto', 'spring', 'summer', 'autumn', 'winter', 'off'];
 const $ = (sel) => document.querySelector(sel);
 const themeById = (id) => THEMES.find((t) => t.id === id) || THEMES[0];
 const stickerById = (id) => STICKERS.find((s) => s.id === id);
-const photoUrl = (name) => `photo://p/${name}`;
+const photoUrl = (name) => window.store.photoUrl(name); // desktop, phone and browser each serve photos their own way
 const paint = (el, theme) => Object.assign(el.style, theme.style);
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const any = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -245,8 +245,8 @@ function toast(msg) {
 }
 
 // ---------- photos ----------
-// Shrinks the photo (phones take huge ones) to a jpeg and hands it to the main
-// process, which saves it in the photos folder and gives back its file name.
+// Shrinks the photo (phones take huge ones) to a jpeg and hands it to the store
+// (the computer's or the phone's), which keeps it and gives back its file name.
 async function importPhoto(file) {
   const bmp = await createImageBitmap(file); // fails for formats Chromium can't read (e.g. HEIC)
   const scale = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
