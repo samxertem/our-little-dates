@@ -66,5 +66,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>so you can snap a photo of your date and tape it into our little book</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>so you can add photos from your dates to the cards and our little book</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>

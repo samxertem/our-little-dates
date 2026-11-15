@@ -88,11 +88,14 @@ it opens with a few example dates so the board isn't empty. delete them whenever
 
 `ctrl + n` adds a date, `esc` closes things, and the arrow keys turn pages in the book.
 
+it runs on phones and tablets too (android, iphone, ipad), see [building the phone apps](docs/building.md).
+
 <br>
 
 ## ❦ where everything is kept
 
-nothing leaves the computer. there's no account and no server, just a file and a folder of photos:
+everything is kept on the device first: no account, just a file and a folder of photos.
+on the computer that's:
 
 ```
 %APPDATA%\our-little-dates\dates.json
@@ -103,16 +106,25 @@ copy that folder and you've backed up everything. the app is careful with it too
 saves can't get cut off halfway, an unreadable file is set aside instead of overwritten,
 and photos you remove go to `photos\unused` instead of being deleted.
 
+**sharing is optional.** in **♡ us → our shared board** one phone starts sharing and the other
+types its code (`MOCHI-XXXX-XXXX`). from then on dates and photos sync between your devices
+through a small [supabase](https://supabase.com) database. only devices that joined with the code
+can see the board, dates are never wiped from it and photos are never overwritten
+(the rules are in [`supabase/schema.sql`](supabase/schema.sql)).
+
 <br>
 
 ## ✎ how it's made
 
-plain electron and plain javascript, no frameworks. all the cats, stickers and themes are
+plain electron and plain javascript, no frameworks (capacitor wraps the same page for phones). all the cats, stickers and themes are
 drawn in code as svg, so there's not a single image file for the art.
 
 ```
 main.js       the window, saving and loading, keeping photos
 preload.js    the small bridge between the page and the disk
+store-*.js    saving on the computer, the phone, or a browser + syncing the shared board
+sharing.js    pairing up in the ♡ us window
+mobile.js     phone-only bits (android's back button)
 index.html    the page and all its pop-ups
 app.js        the board, the editor, photos, search and the shuffle
 book.js       our little book and its page flips
