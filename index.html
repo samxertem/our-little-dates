@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf5ee">
   <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; img-src 'self' data: photo:; style-src 'self' 'unsafe-inline'; font-src 'self'">
   <title>our little dates</title>
@@ -63,7 +65,7 @@
         </div>
         <div class="field"><span>card look</span><div class="swatches" id="swatches"></div></div>
         <div class="field"><span>cat stickers <small id="stickerCount"></small></span><div class="sticker-tray" id="stickerTray"></div></div>
-        <div class="field"><span>photos <small>drop them here too</small></span>
+        <div class="field"><span>photos <small class="drop-hint">drop them here too</small></span>
           <div class="photo-tray" id="photoTray"></div>
           <input type="file" id="photoInput" accept="image/*" multiple hidden>
         </div>
@@ -101,6 +103,7 @@
   <!-- our little book -->
   <div class="overlay book-overlay" id="bookOverlay" hidden>
     <div class="book-stage">
+      <p class="book-tip">turn sideways for a bigger book ↻</p>
       <div class="book" id="book"></div>
       <div class="book-nav">
         <button class="book-arrow" id="bookPrev" type="button" aria-label="previous page">‹</button>

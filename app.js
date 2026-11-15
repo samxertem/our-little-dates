@@ -197,7 +197,7 @@ function renderCard(idea, index) {
       idea.done && idea.doneDate ? h('span', { class: 'when' }, fmtDate(idea.doneDate)) : null)));
   paint(card, themeById(idea.theme));
   const heights = idea.photos.length ? [380, 412] : [262, 304, 346]; // varied heights = pinterest feel
-  card.style.height = `${heights[hash(idea.id) % heights.length]}px`;
+  card.style.setProperty('--h', heights[hash(idea.id) % heights.length]); // css scales it down on phones
   card.style.setProperty('--i', Math.min(index, 14));
   return card;
 }
