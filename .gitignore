@@ -16,3 +16,8 @@ desktop.ini
 
 # capacitor: built web files (regenerate with npm run build:web)
 www/
+
+# private notes: never committed
+MY-*.md
+*.private.md
+private/
