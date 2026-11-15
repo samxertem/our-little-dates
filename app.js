@@ -233,7 +233,11 @@ function closeOverlay(el) {
   if (el.id === 'pickOverlay') { clearTimeout(pickTimer); Mochi.calm(); }
 }
 document.querySelectorAll('.overlay').forEach((ov) => {
-  ov.addEventListener('mousedown', (e) => { if (e.target === ov) closeOverlay(ov); });
+  // Close on a tap/click that both starts *and* ends on the backdrop. Closing on press alone
+  // made phones send the rest of the tap to whatever card was underneath ("ghost click").
+  let downOnBackdrop = false;
+  ov.addEventListener('pointerdown', (e) => { downOnBackdrop = e.target === ov; });
+  ov.addEventListener('click', (e) => { if (downOnBackdrop && e.target === ov) closeOverlay(ov); });
   ov.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => closeOverlay(ov)));
 });
 
@@ -374,8 +378,9 @@ function openEditor(id) {
   del.textContent = 'delete';
 
   openOverlay('#editOverlay');
-  form.querySelector('.modal-body').scrollTop = 0;
-  f.title.focus();
+  form.scrollTop = 0;
+  // on touch screens, jumping into the title would pop the keyboard over the whole editor
+  if (!matchMedia('(pointer: coarse)').matches) f.title.focus();
 }
 
 form.elements.title.addEventListener('input', (e) => { $('#bannerLabel').textContent = e.target.value || 'new date idea'; });

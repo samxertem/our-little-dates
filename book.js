@@ -16,7 +16,7 @@ function buildBook(ideas) {
     .sort((a, b) => (a.doneDate || '').localeCompare(b.doneDate || '') || a.createdAt - b.createdAt);
 }
 
-const book = { leaves: [], cur: 0, z: 0 };
+const book = { leaves: [], cur: 0, z: 0, swipedAt: 0 };
 const FLIP_MS = 900;
 const longDate = (iso) => new Date(`${iso}T00:00`).toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 const monthYear = (iso) => new Date(`${iso}T00:00`).toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
@@ -176,7 +176,10 @@ function openBook() {
     const leaf = h('div', { class: 'leaf' },
       h('div', { class: 'face face-front' }, faces[k]),
       h('div', { class: 'face face-back' }, faces[k + 1]));
-    leaf.addEventListener('click', () => turn(leaf.classList.contains('flipped') ? -1 : 1));
+    leaf.addEventListener('click', () => {
+      if (Date.now() - book.swipedAt < 400) return; // that tap was the end of a swipe, already turned
+      turn(leaf.classList.contains('flipped') ? -1 : 1);
+    });
     book.leaves.push(leaf);
   }
   book.cur = 0;
@@ -191,6 +194,24 @@ function openBook() {
 $('#bookBtn').addEventListener('click', openBook);
 $('#bookPrev').addEventListener('click', () => turn(-1));
 $('#bookNext').addEventListener('click', () => turn(1));
+// Swipe like a real book: drag right-to-left for the next page, left-to-right to go back.
+// Works with a finger, a pen or a mouse; mostly-vertical drags are left alone (they scroll long memories).
+// Listens on the whole overlay: on a phone the closed book is narrow, you shouldn't have to aim.
+let swipe = null;
+const bookOverlay = $('#bookOverlay');
+bookOverlay.addEventListener('pointerdown', (e) => { if (e.isPrimary) swipe = { x: e.clientX, y: e.clientY, t: e.timeStamp }; });
+bookOverlay.addEventListener('pointerup', (e) => {
+  if (!swipe || !e.isPrimary) return;
+  const dx = e.clientX - swipe.x;
+  const dy = e.clientY - swipe.y;
+  const quick = e.timeStamp - swipe.t < 700;
+  swipe = null;
+  if (!quick || Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
+  book.swipedAt = Date.now();
+  turn(dx < 0 ? 1 : -1);
+});
+bookOverlay.addEventListener('pointercancel', () => { swipe = null; });
+
 document.addEventListener('keydown', (e) => {
   if ($('#bookOverlay').hidden) return;
   if (e.key === 'ArrowRight') turn(1);
