@@ -12,7 +12,7 @@ const out = path.join(root, 'www');
 const OWN_FILES = [
   'index.html', 'styles.css', 'icon.png',
   'themes.js', 'stickers.js', 'mochi.js', 'app.js', 'book.js',
-  'store-device.js', 'store-preview.js', 'mobile.js',
+  'store-device.js', 'store-preview.js', 'sync-config.js', 'store-sync.js', 'sharing.js', 'mobile.js',
 ];
 
 // empty www/ rather than delete it: Windows refuses to remove a folder something has open

@@ -3,7 +3,7 @@
 // phone layout on a computer. Everything lives in this browser's localStorage, which
 // only holds ~5 MB, so it's for trying things out — not for keeping real memories.
 (function previewStore() {
-  if (window.store) return;
+  if (window.desktopStore || window.baseStore) return;
 
   const KEY = 'our-little-dates';
   const PHOTO_KEY = 'our-little-dates:photo:';
@@ -17,7 +17,7 @@
     r.readAsDataURL(new Blob([bytes], { type: 'image/jpeg' }));
   });
 
-  window.store = {
+  window.baseStore = {
     async load() {
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
@@ -43,6 +43,18 @@
       return name;
     },
     async tidyPhotos() { return 0; },
+    async hasPhoto(name) { return photos.has(name); },
+    async readPhoto(name) {
+      const url = photos.get(name);
+      return url ? Uint8Array.from(atob(url.split(',')[1]), (c) => c.charCodeAt(0)) : null;
+    },
+    async writePhoto(name, bytes) {
+      if (!PHOTO_NAME.test(name) || photos.has(name)) return true;
+      const url = await toDataUrl(bytes);
+      try { localStorage.setItem(PHOTO_KEY + name, url); } catch { /* preview is full: keep it for this visit only */ }
+      photos.set(name, url);
+      return true;
+    },
     photoUrl: (name) => (PHOTO_NAME.test(name) && photos.get(name)) || '',
   };
 })();

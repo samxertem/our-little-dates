@@ -566,6 +566,38 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: .5; cursor: poi
   .season-fx { display: none; }
 }
 
+/* ---------- our shared board (inside ♡ us) ---------- */
+.share { display: grid; gap: 10px; padding: 14px 16px 16px; border-radius: 20px; background: var(--pink-pale); border: 2px dashed #f6c8d4; }
+.share-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0; font-family: var(--f-head); font-weight: 500; font-size: 1.1rem; color: var(--pink-deep); }
+.share-pill { padding: 1px 9px 2px; border-radius: 999px; font-family: var(--f-body); font-weight: 700; font-size: .72rem; background: #fff; color: var(--ink-soft); }
+.share-pill:empty { display: none; }
+.share-pill[data-state="synced"] { background: #edf5e8; color: #6c9a66; }
+.share-pill[data-state="error"] { background: #fde2e2; color: #c0566f; }
+.share-text, .share-or { margin: 0; font-family: var(--f-hand); font-size: 1.15rem; line-height: 1.2; color: var(--ink-soft); }
+.share-or { font-size: 1.05rem; }
+.share-start { justify-self: start; }
+.share-join { display: flex; gap: 8px; }
+.share-join input { flex: 1; min-width: 0; font-family: var(--f-head); letter-spacing: .06em; text-transform: uppercase; }
+.share-join input::placeholder { letter-spacing: .06em; }
+.share-code {
+  justify-self: start; margin: 0; padding: 8px 16px 9px; border-radius: 14px; background: #fff; box-shadow: 0 0 0 2px #f6c8d4;
+  font-family: var(--f-head); font-weight: 600; font-size: 1.45rem; letter-spacing: .08em; color: var(--pink-deep);
+  user-select: all; -webkit-user-select: all; /* one tap selects the whole code to copy */
+}
+.share-msg { margin: 0; font-family: var(--f-hand); font-weight: 700; font-size: 1.1rem; color: var(--pink-deep); }
+.share-msg:empty { display: none; }
+.share .btn:disabled { opacity: .55; cursor: progress; }
+#shareLeave { justify-self: start; padding-left: 0; }
+
+/* a tiny dot on ♡ us: green = synced, amber = syncing/offline, red = trouble */
+#namesBtn { position: relative; }
+#namesBtn[data-sync]:not([data-sync="off"])::after {
+  content: ''; position: absolute; top: 4px; right: 6px; width: 9px; height: 9px; border-radius: 50%;
+  border: 2px solid #fff; background: #9fc39a;
+}
+#namesBtn[data-sync="syncing"]::after, #namesBtn[data-sync="offline"]::after { background: #f2c46d; }
+#namesBtn[data-sync="error"]::after { background: #e0607e; }
+
 /* ================= ✿ phones + tablets ✿ ================= */
 .book-tip { display: none; }
 

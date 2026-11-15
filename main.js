@@ -53,6 +53,26 @@ ipcMain.handle('photos:add', (_event, bytes) => {
   return name;
 });
 
+// The shared board needs to read a photo to send it, and keep one that arrives from the other phone.
+const photoPath = (name) => {
+  if (typeof name !== 'string' || !PHOTO_NAME.test(name)) throw new Error('bad photo name');
+  return path.join(photosDir(), name);
+};
+ipcMain.handle('photos:has', (_event, name) => fs.existsSync(photoPath(name)));
+ipcMain.handle('photos:read', (_event, name) => {
+  const file = photoPath(name);
+  return fs.existsSync(file) ? new Uint8Array(fs.readFileSync(file)) : null;
+});
+ipcMain.handle('photos:write', (_event, name, bytes) => {
+  if (!ArrayBuffer.isView(bytes) || bytes.byteLength > 25e6) throw new Error('that file is too big');
+  const buf = Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  if (buf[0] !== 0xff || buf[1] !== 0xd8 || buf[2] !== 0xff) throw new Error('not a jpeg');
+  fs.mkdirSync(photosDir(), { recursive: true });
+  const file = photoPath(name);
+  if (!fs.existsSync(file)) fs.writeFileSync(file, buf); // photos never change, so never overwrite one
+  return true;
+});
+
 // Photos no date uses anymore (removed, or their date was deleted) are moved into
 // photos\unused instead of deleted, so a memory is never lost by accident.
 ipcMain.handle('photos:tidy', (_event, keep) => {

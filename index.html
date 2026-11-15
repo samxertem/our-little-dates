@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#fbf5ee">
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src 'self' data: photo:; style-src 'self' 'unsafe-inline'; font-src 'self'">
+        content="default-src 'self'; img-src 'self' data: photo:; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://mamvyebdtxhucpxnzskk.supabase.co wss://mamvyebdtxhucpxnzskk.supabase.co">
   <title>our little dates</title>
   <link rel="stylesheet" href="node_modules/@fontsource/fredoka/400.css">
   <link rel="stylesheet" href="node_modules/@fontsource/fredoka/500.css">
@@ -119,8 +119,28 @@
     <form class="modal small" id="namesForm" autocomplete="off">
       <div class="modal-body">
         <h2 class="modal-title">who are we? ♡</h2>
-        <label class="field"><span>you</span><input name="a" maxlength="20"></label>
-        <label class="field"><span>her</span><input name="b" maxlength="20"></label>
+        <label class="field"><span id="nameLabelA">you</span><input name="a" maxlength="20"></label>
+        <label class="field"><span id="nameLabelB">her</span><input name="b" maxlength="20"></label>
+
+        <section class="share" id="share" hidden>
+          <h3 class="share-title">our shared board <span class="share-pill" id="sharePill"></span></h3>
+          <div id="shareOff">
+            <p class="share-text">share this board between your phones, so you both see every date ♡</p>
+            <button type="button" class="btn btn-pink share-start" id="shareStart">start sharing</button>
+            <p class="share-or">or, if she already started:</p>
+            <div class="share-join">
+              <input id="shareCode" placeholder="MOCHI-XXXX-XXXX" maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="invite code">
+              <button type="button" class="btn btn-soft" id="shareJoin">join</button>
+            </div>
+          </div>
+          <div id="shareOn" hidden>
+            <p class="share-text">on the other phone, open <b>♡ us</b> and join with:</p>
+            <p class="share-code" id="shareCodeShow"></p>
+            <button type="button" class="btn-text danger" id="shareLeave">stop sharing on this device</button>
+          </div>
+          <p class="share-msg" id="shareMsg" role="status"></p>
+        </section>
+
         <p class="hint" id="whereHint"></p>
       </div>
       <footer class="modal-foot">
@@ -131,15 +151,20 @@
     </form>
   </div>
 
-  <!-- storage: Electron's preload sets window.store first; otherwise the phone app's, else a browser preview -->
+  <!-- storage: Electron's preload gives desktopStore; otherwise the phone app's, else a browser preview -->
   <script src="node_modules/@capacitor/core/dist/capacitor.js"></script>
   <script src="store-device.js"></script>
   <script src="store-preview.js"></script>
+  <!-- the shared board wraps whichever store was picked above -->
+  <script src="node_modules/@supabase/supabase-js/dist/umd/supabase.js"></script>
+  <script src="sync-config.js"></script>
+  <script src="store-sync.js"></script>
   <script src="themes.js"></script>
   <script src="stickers.js"></script>
   <script src="mochi.js"></script>
   <script src="app.js"></script>
   <script src="book.js"></script>
+  <script src="sharing.js"></script>
   <script src="mobile.js"></script>
 </body>
 </html>

@@ -1,10 +1,10 @@
 'use strict';
 // On a phone or tablet there's no Electron preload, so this builds the same little
-// `window.store` bridge on top of the app's private storage on the device. Same
-// promises, same photoUrl, so app.js never knows which one it's talking to.
+// store bridge on top of the app's private storage on the device. Same promises, same
+// photoUrl, so app.js never knows which one it's talking to (store-sync.js picks it up).
 (function deviceStore() {
   const cap = window.Capacitor;
-  if (window.store || !cap?.isNativePlatform?.()) return;
+  if (window.desktopStore || window.baseStore || !cap?.isNativePlatform?.()) return;
 
   const fs = cap.registerPlugin('Filesystem');
   const DIR = 'DATA'; // the app's own private folder: survives updates, gone only on uninstall
@@ -37,7 +37,7 @@
     }
   }
 
-  window.store = {
+  window.baseStore = {
     async load() {
       const { uri } = await fs.getUri(at(PHOTOS));
       photoBase = cap.convertFileSrc(uri);
@@ -87,6 +87,21 @@
         moved += 1;
       }
       return moved;
+    },
+
+    // for the shared board: send a photo, keep one that came from the other phone
+    async hasPhoto(name) { return PHOTO_NAME.test(name) && exists(`${PHOTOS}/${name}`); },
+    async readPhoto(name) {
+      if (!PHOTO_NAME.test(name) || !(await exists(`${PHOTOS}/${name}`))) return null;
+      const { data } = await fs.readFile(at(`${PHOTOS}/${name}`)); // base64
+      return Uint8Array.from(atob(data), (c) => c.charCodeAt(0));
+    },
+    async writePhoto(name, bytes) {
+      if (!PHOTO_NAME.test(name)) throw new Error('bad photo name');
+      if (bytes[0] !== 0xff || bytes[1] !== 0xd8 || bytes[2] !== 0xff) throw new Error('not a jpeg');
+      if (await exists(`${PHOTOS}/${name}`)) return true; // photos never change
+      await fs.writeFile({ ...at(`${PHOTOS}/${name}`), data: await toBase64(bytes), recursive: true });
+      return true;
     },
 
     photoUrl: (name) => (photoBase && PHOTO_NAME.test(name) ? `${photoBase}/${name}` : ''),

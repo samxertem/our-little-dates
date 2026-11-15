@@ -35,21 +35,23 @@ const ui = { tab: 'wish', query: '', tag: null, lastPickedId: null };
 
 function blankIdea(extra = {}) {
   return {
-    id: uid(), title: '', note: '', who: 'a', tags: [], cost: 0, theme: 'gingham',
+    id: uid(), title: '', note: '', who: window.store?.sharing?.me || 'a', tags: [], cost: 0, theme: 'gingham',
     stickers: [], photos: [], done: false, doneDate: '', memory: '', createdAt: Date.now(), ...extra,
   };
 }
 
 // A few examples so the board isn't empty on first open; delete them whenever.
+// (`example` = untouched; a phone joining your shared board leaves these behind.)
 function seed() {
   const t = Date.now();
+  const ex = { example: true };
   return {
     version: 1,
     names: { a: 'me', b: 'her' },
     ideas: [
-      blankIdea({ title: 'clay date', note: 'pottery class or air-dry clay at home, make each other something tiny', who: 'b', tags: ['cozy', 'artsy'], cost: 2, theme: 'strawberry', stickers: ['heart'], createdAt: t }),
-      blankIdea({ title: 'guinness date', note: 'find the best pint in town and rate the foam', who: 'a', tags: ['night out'], cost: 1, theme: 'pond', stickers: ['mug'], createdAt: t - 1 }),
-      blankIdea({ title: 'sunset picnic', note: 'blanket, strawberries, a little speaker', who: 'both', tags: ['outside', 'cozy'], cost: 0, theme: 'sky', stickers: ['strawberry', 'balloon'], createdAt: t - 2 }),
+      blankIdea({ ...ex, title: 'clay date', note: 'pottery class or air-dry clay at home, make each other something tiny', who: 'b', tags: ['cozy', 'artsy'], cost: 2, theme: 'strawberry', stickers: ['heart'], createdAt: t }),
+      blankIdea({ ...ex, title: 'guinness date', note: 'find the best pint in town and rate the foam', who: 'a', tags: ['night out'], cost: 1, theme: 'pond', stickers: ['mug'], createdAt: t - 1 }),
+      blankIdea({ ...ex, title: 'sunset picnic', note: 'blanket, strawberries, a little speaker', who: 'both', tags: ['outside', 'cozy'], cost: 0, theme: 'sky', stickers: ['strawberry', 'balloon'], createdAt: t - 2 }),
     ],
   };
 }
@@ -397,6 +399,7 @@ form.addEventListener('submit', (e) => {
   if (importing) { toast('one sec, still adding photos…'); return; }
   const wasDone = Boolean(data.ideas.find((i) => i.id === draft.id)?.done);
 
+  delete draft.example; // once you've edited it, it's yours
   Object.assign(draft, {
     title,
     note: f.note.value.trim(),
@@ -542,4 +545,12 @@ document.addEventListener('keydown', (e) => {
   Mochi.onPet = (n) => { data.mochi.pets = n; saveSoon(); };
   applySeason();
   render();
+
+  // the shared board: your partner's changes arrive here (only once you've paired up)
+  window.store.subscribe?.((fresh) => {
+    data = normalize(fresh);
+    Mochi.setPets(data.mochi.pets);
+    applySeason();
+    render();
+  });
 })();
