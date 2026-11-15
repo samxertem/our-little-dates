@@ -43,18 +43,24 @@ go on gets a page in our book, and there is a cat in the corner watching over al
 ## ♡ a little look
 
 <p align="center">
-  <img src="docs/screenshots/done.png" width="49%" alt="done and loved">
-  <img src="docs/screenshots/pick.png" width="49%" alt="pick one for us">
+  <img src="docs/screenshots/shuffle.gif" width="760" alt="the shuffle picking a date">
 </p>
-<p align="center"><sub>✦ the dates we've done &nbsp;·&nbsp; the shuffle picking our next one ✦</sub></p>
+<p align="center"><sub>✦ can't decide? let the shuffle pick for us ✦</sub></p>
 
 <br>
 
 <p align="center">
-  <img src="docs/screenshots/book-cover.png" width="49%" alt="our little book cover">
+  <img src="docs/screenshots/book-flip.gif" width="760" alt="flipping through our little book">
+</p>
+<p align="center"><sub>✦ flipping through our little book ✦</sub></p>
+
+<br>
+
+<p align="center">
+  <img src="docs/screenshots/done.png" width="49%" alt="done and loved">
   <img src="docs/screenshots/book.png" width="49%" alt="a page inside our little book">
 </p>
-<p align="center"><sub>✦ our little book, closed and open ✦</sub></p>
+<p align="center"><sub>✦ the dates we've done &nbsp;·&nbsp; a page from the book ✦</sub></p>
 
 <br>
 
