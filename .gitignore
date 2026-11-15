@@ -13,3 +13,6 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# capacitor: built web files (regenerate with npm run build:web)
+www/

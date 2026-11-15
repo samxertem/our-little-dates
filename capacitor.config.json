@@ -1,0 +1,12 @@
+{
+  "appId": "io.github.samxertem.ourlittledates",
+  "appName": "our little dates",
+  "webDir": "www",
+  "backgroundColor": "#fbf5ee",
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "css",
+      "style": "LIGHT"
+    }
+  }
+}
