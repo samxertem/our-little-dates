@@ -110,7 +110,8 @@ and photos you remove go to `photos\unused` instead of being deleted.
 types its code (`MOCHI-XXXX-XXXX`). from then on dates and photos sync between your devices
 through a small [supabase](https://supabase.com) database. only devices that joined with the code
 can see the board, dates are never wiped from it and photos are never overwritten
-(the rules are in [`supabase/schema.sql`](supabase/schema.sql)).
+(the rules are in [`supabase/schema.sql`](supabase/schema.sql), the plain-words version is the
+[privacy policy](docs/privacy.md)).
 
 <br>
 
