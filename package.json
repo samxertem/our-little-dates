@@ -5,12 +5,22 @@
   "private": true,
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build:web": "node scripts/build-web.mjs",
+    "sync": "npm run build:web && cap sync",
+    "android": "npm run sync && cap open android",
+    "ios": "npm run sync && cap open ios"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.6.2",
     "electron": "^45.3.1"
   },
   "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/ios": "^8.6.2",
     "@fontsource/fredoka": "^5.3.0",
     "@fontsource/gaegu": "^5.3.0",
     "@fontsource/quicksand": "^5.3.0"

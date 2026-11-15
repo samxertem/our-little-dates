@@ -131,10 +131,15 @@
     </form>
   </div>
 
+  <!-- storage: Electron's preload sets window.store first; otherwise the phone app's, else a browser preview -->
+  <script src="node_modules/@capacitor/core/dist/capacitor.js"></script>
+  <script src="store-device.js"></script>
+  <script src="store-preview.js"></script>
   <script src="themes.js"></script>
   <script src="stickers.js"></script>
   <script src="mochi.js"></script>
   <script src="app.js"></script>
   <script src="book.js"></script>
+  <script src="mobile.js"></script>
 </body>
 </html>
